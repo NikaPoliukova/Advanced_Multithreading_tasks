@@ -30,9 +30,5 @@ public class Main {
         for (int num : array) {
             System.out.print(num + " ");
         }
-
-
-
-
     }
 }
