@@ -21,6 +21,7 @@ public class FactorialTask extends RecursiveTask<BigInteger> {
                 result = result.multiply(BigInteger.valueOf(i));
             }
             return result;
+            
         } else {
             int mid = (start + end) / 2;
             FactorialTask left = new FactorialTask(start, mid);
