@@ -19,12 +19,5 @@ public class Main {
         sequentialFactorial.factorial(number);
         long endSeq = System.nanoTime();
         System.out.println("Sequential time: " + (endSeq - startSeq) / 1_000_000 + " ms");
-
-
-
-
-
-
-
     }
 }
