@@ -8,6 +8,7 @@ public class SequentialFactorial {
         for (int i = 2; i <= n; i++) {
             result = result.multiply(BigInteger.valueOf(i));
         }
+        
         return result;
     }
 }
