@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 
 public class Main {
@@ -55,5 +57,27 @@ public class Main {
         System.out.println("Folders: " + result.folderCount);
         System.out.println("Size: " + result.totalSize + " byte");
 
-            }
+//Task 4
+        CompletableFutureService service = new CompletableFutureService();
+
+        try {
+            service.hiredEmployees()
+                    .thenCompose(employees ->
+                            CompletableFuture.allOf(
+                                    employees.stream()
+                                            .map(emp -> service.getSalary(emp.id)
+                                                    .thenAccept(emp::setSalary)
+                                                    .toCompletableFuture())
+                                            .toArray(CompletableFuture[]::new)
+                            ).thenApply(v -> employees)
+                    )
+                    .thenAccept(list -> {
+                        list.forEach(System.out::println);
+                    })
+                    .toCompletableFuture()
+                    .get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
