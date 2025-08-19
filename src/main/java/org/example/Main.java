@@ -27,7 +27,7 @@ public class Main {
         System.out.println("Sequential time: " + (endSeq - startSeq) / 1_000_000 + " ms");
 
 //Task 2
-        int[] array = {5, 2, 9, 1, 5, 6, 10, 3,33,78,4,55,89,559,4848,22,47,13};
+        int[] array = {5, 2, 9, 1, 5, 6, 10, 3, 33, 78, 4, 55, 89, 559, 4848, 22, 47, 13};
 
         ForkJoinPool forkJoinPool = new ForkJoinPool();
         MultithreadingSorting task = new MultithreadingSorting(array, 0, array.length - 1);
@@ -107,14 +107,14 @@ public class Main {
         });
         producerThread.start();
         consumerThread.start();
-    }
+
 
         //BlockingQueue
-        ProducerConsumerBlockingQueue pc = new ProducerConsumerBlockingQueue();
+        ProducerConsumerBlockingQueue pc1 = new ProducerConsumerBlockingQueue();
         Thread producerThread1 = new Thread(() -> {
             try {
                 for (int i = 0; i < 10; i++) {
-                    pc.produce(i);
+                    pc1.produce(i);
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
@@ -124,15 +124,16 @@ public class Main {
         Thread consumerThread1 = new Thread(() -> {
             try {
                 for (int i = 0; i < 10; i++) {
-                    pc.consume();
+                    pc1.consume();
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
         });
 
-       // producerThread1.start();    uncomment before using BlockingQueue
-        //consumerThread1.start();    uncomment before using BlockingQueue
+        producerThread1.start();
+        consumerThread1.start();
     }
 }
+
 
