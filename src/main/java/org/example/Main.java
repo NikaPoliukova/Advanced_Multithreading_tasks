@@ -79,5 +79,60 @@ public class Main {
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }
+
+        //Task 5
+//Semaphore
+        ProducerConsumerSemaphore pc = new ProducerConsumerSemaphore();
+
+        Thread producerThread = new Thread(() -> {
+            try {
+                for (int i = 0; i < 10; i++) {
+                    pc.produce(i);
+                    Thread.sleep(1000); // Имитация задержки для удобства наблюдения
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        Thread consumerThread = new Thread(() -> {
+            try {
+                for (int i = 0; i < 10; i++) {
+                    pc.consume();
+                    Thread.sleep(1500); // Имитация задержки для удобства наблюдения
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+        producerThread.start();
+        consumerThread.start();
+    }
+
+        //BlockingQueue
+        ProducerConsumerBlockingQueue pc = new ProducerConsumerBlockingQueue();
+        Thread producerThread1 = new Thread(() -> {
+            try {
+                for (int i = 0; i < 10; i++) {
+                    pc.produce(i);
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        Thread consumerThread1 = new Thread(() -> {
+            try {
+                for (int i = 0; i < 10; i++) {
+                    pc.consume();
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+       // producerThread1.start();    uncomment before using BlockingQueue
+        //consumerThread1.start();    uncomment before using BlockingQueue
     }
 }
+
