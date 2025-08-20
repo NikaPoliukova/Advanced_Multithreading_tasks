@@ -11,4 +11,5 @@ public class SequentialFactorial {
         
         return result;
     }
+
 }

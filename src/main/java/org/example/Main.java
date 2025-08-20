@@ -5,6 +5,7 @@ import java.util.concurrent.ForkJoinPool;
 
 public class Main {
     public static void main(String[] args) {
+
         int number = 2000;
         // ForkJoin
         ForkJoinPool pool = new ForkJoinPool();
@@ -19,5 +20,6 @@ public class Main {
         sequentialFactorial.factorial(number);
         long endSeq = System.nanoTime();
         System.out.println("Sequential time: " + (endSeq - startSeq) / 1_000_000 + " ms");
+
     }
 }
