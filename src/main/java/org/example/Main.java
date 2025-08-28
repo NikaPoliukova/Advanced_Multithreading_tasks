@@ -5,6 +5,7 @@ import java.util.concurrent.ForkJoinPool;
 
 public class Main {
     public static void main(String[] args) {
+
         int number = 2000;
         // ForkJoin
         ForkJoinPool pool = new ForkJoinPool();
