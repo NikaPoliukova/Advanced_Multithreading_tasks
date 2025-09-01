@@ -8,7 +8,9 @@ import java.util.Scanner;
 import java.util.concurrent.ForkJoinPool;
 
 public class Main {
+
     public static void main(String[] args) throws IOException {
+
         int number = 2000;
         // ForkJoin
         ForkJoinPool pool = new ForkJoinPool();
@@ -34,6 +36,7 @@ public class Main {
         for (int num : array) {
             System.out.print(num + " ");
         }
+
 
 //Task 3
         String folderPath;
