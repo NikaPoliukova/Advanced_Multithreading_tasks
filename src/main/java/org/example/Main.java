@@ -1,7 +1,11 @@
 package org.example;
 
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Random;
@@ -11,9 +15,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 
 public class Main {
-
     public static void main(String[] args) throws IOException {
-
         int number = 2000;
         // ForkJoin
         ForkJoinPool pool = new ForkJoinPool();
@@ -23,23 +25,19 @@ public class Main {
         System.out.println("ForkJoin time: " + (endFjp - startFjp) / 1_000_000 + " ms");
 
         //Sequential
-        SequentialFactorial sequentialFactorial = new SequentialFactorial();
         long startSeq = System.nanoTime();
-        sequentialFactorial.factorial(number);
+        multiplyRange(1, number);
         long endSeq = System.nanoTime();
         System.out.println("Sequential time: " + (endSeq - startSeq) / 1_000_000 + " ms");
 
 //Task 2
         int[] array = {5, 2, 9, 1, 5, 6, 10, 3, 33, 78, 4, 55, 89, 559, 4848, 22, 47, 13};
-
         ForkJoinPool forkJoinPool = new ForkJoinPool();
         MultithreadingSorting task = new MultithreadingSorting(array, 0, array.length - 1);
-
         forkJoinPool.invoke(task);
         for (int num : array) {
             System.out.print(num + " ");
         }
-
 
 //Task 3
         String folderPath;
@@ -52,7 +50,6 @@ public class Main {
         }
 
         Path rootPath = Paths.get(folderPath);
-
         ForkJoinPool pool3 = new ForkJoinPool();
         var result = pool3.invoke(new FolderScanner(rootPath));
 
@@ -60,7 +57,6 @@ public class Main {
         System.out.println("Failes: " + result.fileCount);
         System.out.println("Folders: " + result.folderCount);
         System.out.println("Size: " + result.totalSize + " byte");
-
 
 //Task 4
         CompletableFutureService service = new CompletableFutureService();
@@ -85,15 +81,14 @@ public class Main {
             throw new RuntimeException(e);
         }
 
-        //Task 5
+//Task 5
 //Semaphore
         ProducerConsumerSemaphore pc = new ProducerConsumerSemaphore();
-
         Thread producerThread = new Thread(() -> {
             try {
                 for (int i = 0; i < 10; i++) {
                     pc.produce(i);
-                    Thread.sleep(1000); // Имитация задержки для удобства наблюдения
+                    Thread.sleep(1000);
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
@@ -104,7 +99,7 @@ public class Main {
             try {
                 for (int i = 0; i < 10; i++) {
                     pc.consume();
-                    Thread.sleep(1500); // Имитация задержки для удобства наблюдения
+                    Thread.sleep(1500);
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
@@ -112,7 +107,6 @@ public class Main {
         });
         producerThread.start();
         consumerThread.start();
-
 
         //BlockingQueue
         ProducerConsumerBlockingQueue pc1 = new ProducerConsumerBlockingQueue();
@@ -138,7 +132,7 @@ public class Main {
 
         producerThread1.start();
         consumerThread1.start();
-  //Task 6
+ //Task 6
         int n1 = 500_000_000;
         double[] array1 = new double[n1];
         Random random = new Random();
@@ -167,6 +161,46 @@ public class Main {
         long end2 = System.currentTimeMillis();
         System.out.println("ForkJoin sum: " + forkJoinSum);
         System.out.println("ForkJoin time: " + (end2 - start2) + " ms");
+
+//task 7
+        try {
+            File inputFile = new File("images/123.png");
+            if (!inputFile.exists()) {
+                throw new IllegalArgumentException("File not found: " + inputFile.getAbsolutePath());
+            }
+
+            BufferedImage inputImage = ImageIO.read(inputFile);
+            int width = inputImage.getWidth();
+            int height = inputImage.getHeight();
+
+            int[] source = new int[width * height];
+            inputImage.getRGB(0, 0, width, height, source, 0, width);
+
+            int[] destination = new int[source.length];
+
+            ForkJoinPool pool4 = new ForkJoinPool();
+            ForkBlur task4 = new ForkBlur(source, 0, source.length, destination);
+            pool4.invoke(task4);
+
+            BufferedImage outputImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            outputImage.setRGB(0, 0, width, height, destination, 0, width);
+
+            File outputFile = new File("images/blurred.png");
+            ImageIO.write(outputImage, "png", outputFile);
+
+            System.out.println("Blur completed. Saved as: " + outputFile.getAbsolutePath());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    static BigInteger multiplyRange(int start, int end) {
+        BigInteger result = BigInteger.ONE;
+        for (int i = start; i <= end; i++) {
+            result = result.multiply(BigInteger.valueOf(i));
+        }
+        return result;
     }
 }
 

@@ -3,8 +3,9 @@ package org.example;
 import java.math.BigInteger;
 import java.util.concurrent.RecursiveTask;
 
-public class FactorialTask extends RecursiveTask<BigInteger> {
+import static org.example.Main.multiplyRange;
 
+public class FactorialTask extends RecursiveTask<BigInteger> {
     private final int start;
     private final int end;
     private static final int THRESHOLD = 10;
@@ -17,12 +18,7 @@ public class FactorialTask extends RecursiveTask<BigInteger> {
     @Override
     protected BigInteger compute() {
         if (end - start <= THRESHOLD) {
-            BigInteger result = BigInteger.ONE;
-            for (int i = start; i <= end; i++) {
-                result = result.multiply(BigInteger.valueOf(i));
-            }
-            return result;
-            
+            return multiplyRange(start, end);
         } else {
             int mid = (start + end) / 2;
             FactorialTask left = new FactorialTask(start, mid);

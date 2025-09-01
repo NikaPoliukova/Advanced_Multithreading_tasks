@@ -27,8 +27,8 @@ public class MultithreadingSorting extends RecursiveAction {
     }
 
     private void merge(int left, int mid, int right) {
-
         int[] temp = new int[right - left + 1];
+
         int leftIndex = left;
         int rightIndex = mid + 1;
         int tempIndex = 0;
