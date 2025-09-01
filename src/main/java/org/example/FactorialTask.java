@@ -18,7 +18,7 @@ public class FactorialTask extends RecursiveTask<BigInteger> {
     @Override
     protected BigInteger compute() {
         if (end - start <= THRESHOLD) {
-            return multiplyRange(start, end); // используем метод из enclosing класса
+            return multiplyRange(start, end);
         } else {
             int mid = (start + end) / 2;
             FactorialTask left = new FactorialTask(start, mid);
