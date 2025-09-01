@@ -1,6 +1,9 @@
 package org.example;
 
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -81,7 +84,7 @@ public class Main {
             throw new RuntimeException(e);
         }
 
-        //Task 5
+//Task 5
 //Semaphore
         ProducerConsumerSemaphore pc = new ProducerConsumerSemaphore();
 
@@ -89,7 +92,7 @@ public class Main {
             try {
                 for (int i = 0; i < 10; i++) {
                     pc.produce(i);
-                    Thread.sleep(1000); // Имитация задержки для удобства наблюдения
+                    Thread.sleep(1000);
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
@@ -100,7 +103,7 @@ public class Main {
             try {
                 for (int i = 0; i < 10; i++) {
                     pc.consume();
-                    Thread.sleep(1500); // Имитация задержки для удобства наблюдения
+                    Thread.sleep(1500);
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
@@ -163,6 +166,38 @@ public class Main {
         long end2 = System.currentTimeMillis();
         System.out.println("ForkJoin sum: " + forkJoinSum);
         System.out.println("ForkJoin time: " + (end2 - start2) + " ms");
+
+//task 7
+        try {
+            File inputFile = new File("images/123.png");
+            if (!inputFile.exists()) {
+                throw new IllegalArgumentException("File not found: " + inputFile.getAbsolutePath());
+            }
+
+            BufferedImage inputImage = ImageIO.read(inputFile);
+            int width = inputImage.getWidth();
+            int height = inputImage.getHeight();
+
+            int[] source = new int[width * height];
+            inputImage.getRGB(0, 0, width, height, source, 0, width);
+
+            int[] destination = new int[source.length];
+
+            ForkJoinPool pool4 = new ForkJoinPool();
+            ForkBlur task4 = new ForkBlur(source, 0, source.length, destination);
+            pool4.invoke(task4);
+
+            BufferedImage outputImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            outputImage.setRGB(0, 0, width, height, destination, 0, width);
+
+            File outputFile = new File("images/blurred.png");
+            ImageIO.write(outputImage, "png", outputFile);
+
+            System.out.println("Blur completed. Saved as: " + outputFile.getAbsolutePath());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 
