@@ -4,6 +4,7 @@ package org.example;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -137,7 +138,35 @@ public class Main {
 
         producerThread1.start();
         consumerThread1.start();
+  //Task 6
+        int n1 = 500_000_000;
+        double[] array1 = new double[n1];
+        Random random = new Random();
+
+        for (int i = 0; i < n1; i++) {
+            array1[i] = random.nextDouble();
+        }
+
+        ForkJoinPool pool2 = new ForkJoinPool();
+
+        // Linear
+        long start1 = System.currentTimeMillis();
+        double linearSum = 0;
+        for (double v : array) {
+            linearSum += v * v;
+        }
+        long end1 = System.currentTimeMillis();
+        System.out.println("Linear sum: " + linearSum);
+        System.out.println("Linear time: " + (end1 - start1) + " ms");
+
+        // Parallel
+        long start2 = System.currentTimeMillis();
+        Applyer task1 = new Applyer(array1, 0, n1, null);
+        pool2.invoke(task1);
+        double forkJoinSum = task1.result;
+        long end2 = System.currentTimeMillis();
+        System.out.println("ForkJoin sum: " + forkJoinSum);
+        System.out.println("ForkJoin time: " + (end2 - start2) + " ms");
     }
 }
-
 
