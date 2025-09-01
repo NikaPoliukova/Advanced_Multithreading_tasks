@@ -10,7 +10,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 
 public class Main {
+
     public static void main(String[] args) throws IOException {
+
         int number = 2000;
         // ForkJoin
         ForkJoinPool pool = new ForkJoinPool();
@@ -37,6 +39,7 @@ public class Main {
             System.out.print(num + " ");
         }
 
+
 //Task 3
         String folderPath;
         if (args.length >= 1) {
@@ -56,6 +59,7 @@ public class Main {
         System.out.println("Failes: " + result.fileCount);
         System.out.println("Folders: " + result.folderCount);
         System.out.println("Size: " + result.totalSize + " byte");
+
 
 //Task 4
         CompletableFutureService service = new CompletableFutureService();
@@ -81,3 +85,4 @@ public class Main {
         }
     }
 }
+
