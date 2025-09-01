@@ -30,7 +30,6 @@ public class Main {
         long endSeq = System.nanoTime();
         System.out.println("Sequential time: " + (endSeq - startSeq) / 1_000_000 + " ms");
 
-
 //Task 2
         int[] array = {5, 2, 9, 1, 5, 6, 10, 3, 33, 78, 4, 55, 89, 559, 4848, 22, 47, 13};
         ForkJoinPool forkJoinPool = new ForkJoinPool();
