@@ -1,10 +1,15 @@
 package org.example;
 
-import java.math.BigInteger;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Scanner;
 import java.util.concurrent.ForkJoinPool;
 
 public class Main {
-    public static void main(String[] args) {
+
+    public static void main(String[] args) throws IOException {
 
         int number = 2000;
         // ForkJoin
@@ -31,5 +36,27 @@ public class Main {
         for (int num : array) {
             System.out.print(num + " ");
         }
-    }
+
+
+//Task 3
+        String folderPath;
+        if (args.length >= 1) {
+            folderPath = args[0];
+        } else {
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Enter path to folder: ");
+            folderPath = scanner.nextLine();
+        }
+
+        Path rootPath = Paths.get(folderPath);
+
+        ForkJoinPool pool3 = new ForkJoinPool();
+        var result = pool3.invoke(new FolderScanner(rootPath));
+
+        System.out.println(" Results:");
+        System.out.println("Failes: " + result.fileCount);
+        System.out.println("Folders: " + result.folderCount);
+        System.out.println("Size: " + result.totalSize + " byte");
+
+            }
 }
