@@ -5,6 +5,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Random;
@@ -24,18 +25,16 @@ public class Main {
         System.out.println("ForkJoin time: " + (endFjp - startFjp) / 1_000_000 + " ms");
 
         //Sequential
-        SequentialFactorial sequentialFactorial = new SequentialFactorial();
         long startSeq = System.nanoTime();
-        sequentialFactorial.factorial(number);
+        multiplyRange(1, number);
         long endSeq = System.nanoTime();
         System.out.println("Sequential time: " + (endSeq - startSeq) / 1_000_000 + " ms");
 
+
 //Task 2
         int[] array = {5, 2, 9, 1, 5, 6, 10, 3, 33, 78, 4, 55, 89, 559, 4848, 22, 47, 13};
-
         ForkJoinPool forkJoinPool = new ForkJoinPool();
         MultithreadingSorting task = new MultithreadingSorting(array, 0, array.length - 1);
-
         forkJoinPool.invoke(task);
         for (int num : array) {
             System.out.print(num + " ");
@@ -52,7 +51,6 @@ public class Main {
         }
 
         Path rootPath = Paths.get(folderPath);
-
         ForkJoinPool pool3 = new ForkJoinPool();
         var result = pool3.invoke(new FolderScanner(rootPath));
 
@@ -87,7 +85,6 @@ public class Main {
 //Task 5
 //Semaphore
         ProducerConsumerSemaphore pc = new ProducerConsumerSemaphore();
-
         Thread producerThread = new Thread(() -> {
             try {
                 for (int i = 0; i < 10; i++) {
@@ -111,7 +108,6 @@ public class Main {
         });
         producerThread.start();
         consumerThread.start();
-
 
         //BlockingQueue
         ProducerConsumerBlockingQueue pc1 = new ProducerConsumerBlockingQueue();
@@ -137,7 +133,7 @@ public class Main {
 
         producerThread1.start();
         consumerThread1.start();
-  //Task 6
+ //Task 6
         int n1 = 500_000_000;
         double[] array1 = new double[n1];
         Random random = new Random();
@@ -198,6 +194,14 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    static BigInteger multiplyRange(int start, int end) {
+        BigInteger result = BigInteger.ONE;
+        for (int i = start; i <= end; i++) {
+            result = result.multiply(BigInteger.valueOf(i));
+        }
+        return result;
     }
 }
 
